@@ -1,95 +1,83 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import { useState } from "react";
+import Tasks from "./tasks";
+import Completed from "./completed";
+import TaskList from "./components/TaskList";
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  // States
+  const [view, setView] = useState("home");
+  const [tasks, setTasks] = useState([
+    // Placeholder tasks:
+    { id: 1000, text: "Clean dishes", completed: false },
+    { id: 1001, text: "CPAN144 Assignment", completed: false },
+    { id: 1002, text: "CPAN144 Lab", completed: true },
+  ]);
+  const [newTask, setNewTask] = useState("");
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+  // Add a new task
+  const addTask = () => {
+    setTasks([
+      ...tasks,
+      { id: tasks.length + 1, text: newTask, completed: false },
+    ]);
+    setNewTask("");
+  };
+
+  // Mark a task as completed
+  const completeTask = (id) => {
+    setTasks(
+      tasks.map((task) =>
+        task.id === id ? { ...task, completed: true } : task
+      )
+    );
+  };
+
+  // Filter Completed Tasks
+  const completedTasks = tasks.filter((task) => task.completed);
+
+  return (
+    <div>
+      <h1>To-Do List App</h1>
+      <nav>
+        <ul>
+          <li onClick={() => setView("home")}>Home</li>
+          <li onClick={() => setView("tasks")}>View Tasks</li>
+          <li onClick={() => setView("completed")}>Completed Tasks</li>
+        </ul>
+      </nav>
+
+      {view === "home" && (
+        <div>
+          <h2>Welcome to the To-Do List App</h2>
+          <p>Use the navigation above to manage your tasks.</p>
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+      )}
+
+      {view === "tasks" && (
+        <div>
+          <Tasks
+            tasks={tasks}
+            setTasks={setTasks}
+            newTask={newTask}
+            setNewTask={setNewTask}
+            addTask={addTask}
+            completeTask={completeTask}
           />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+          <TaskList tasks={tasks} completeTask={completeTask} />
+        </div>
+      )}
+
+      {view === "completed" && (
+        <div>
+          <Completed tasks={tasks} />
+          <TaskList
+            // Only passing down the completed tasks
+            tasks={completedTasks}
+            completeTask={completeTask}
           />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        </div>
+      )}
     </div>
   );
 }

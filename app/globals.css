@@ -40,3 +40,52 @@ a {
     color-scheme: dark;
   }
 }
+
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  text-align: center;
+}
+
+nav ul li {
+  list-style: none;
+  padding: 10px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+button {
+  padding: 8px 15px;
+  margin: 5px;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #005bb5;
+}
+
+.taskItem {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  margin: 0 25% 0 25%;
+  border-bottom: black 2px solid;
+  margin-bottom: 5px;
+}
+
+.taskItem p {
+  padding: 8px 0;
+  margin: 0;
+}
+
+.taskItem button {
+  padding: 8px 15px;
+  margin: 0;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
